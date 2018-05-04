@@ -1,7 +1,10 @@
 ﻿
+using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Portfolio.Models;
+using Portfolio.Data;
 
 namespace Portfolio
 {
@@ -17,21 +20,17 @@ namespace Portfolio
                 .UseApplicationInsights()
                 .Build();
 
-            //Startup needs lines below to run DbInitializer
-            //using (var scope = host.Services.CreateScope())
-            //{
-            //    var services = scope.ServiceProvider;
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
 
-            //    try
-            //    {
-            //        var context = services.GetRequiredService<PortfolioDbContext>();
-            //        DbInitializer.Initialize(context);
-            //    }
-            //    catch (Exception)
-            //    {
-
-            //    }
-            //}
+                try
+                {
+                    var context = services.GetRequiredService<PortfolioDbContext>();
+                    DbInitializer.Initialize(context);
+                }
+                catch (Exception){}
+            }
 
             host.Run();
         }

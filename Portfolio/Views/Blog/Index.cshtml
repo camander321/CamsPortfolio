@@ -5,9 +5,15 @@
 
 <h2>My Blog Posts</h2>
 
+@if (User.IsInRole("Admin"))
+{
+
+}
+
 <div id="posts">
+
+    <div id="post-list"></div>
     <h5>Showing posts <span id="first"></span>-<span id="last"></span> of <span id="total"></span></h5>
-    <ul id="post-list"></ul>
 </div>
 
 <script>
@@ -29,7 +35,7 @@
             result.data.forEach(function (item) {
                 var html = "<h3>" + item.title + "</h3>";
                 html += "<h6>" + item.time + "</h6>";
-                list.append("<li>" + html + "</li>");
+                list.append("<div class='well'>" + html + "</div>");
             })
         }
     });
