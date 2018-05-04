@@ -92,7 +92,7 @@ namespace Portfolio.Controllers
 
         public IActionResult GetComments(int id)
         {
-            return Json(_db.Comments.Include(c => c.User).Where(c => c.BlogPostId == id));
+            return Json(_db.Comments.Include(c => c.User).Where(c => c.BlogPostId == id).OrderByDescending(c => c.Time).Take(25));
         }
 
         [Authorize(Roles = "Admin")]
