@@ -8,9 +8,10 @@ using Portfolio.Models;
 namespace Portfolio.Migrations
 {
     [DbContext(typeof(PortfolioDbContext))]
-    partial class PortfolioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180504203630_fixUserForComments2")]
+    partial class fixUserForComments2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.5");
@@ -196,8 +197,6 @@ namespace Portfolio.Migrations
                     b.Property<int>("BlogPostId");
 
                     b.Property<string>("Content");
-
-                    b.Property<DateTime>("Time");
 
                     b.Property<string>("UserId");
 

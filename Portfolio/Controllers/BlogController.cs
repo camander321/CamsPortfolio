@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Portfolio.Models;
 using Portfolio.ViewModels;
 
@@ -86,6 +88,35 @@ namespace Portfolio.Controllers
             _db.Entry(post).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _db.SaveChanges();
             return RedirectToAction("Details", new { id = post.BlogPostKey });
+        }
+
+        public IActionResult GetComments(int id)
+        {
+            return Json(_db.Comments.Include(c => c.User).Where(c => c.BlogPostId == id));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult DeleteComment(int id)
+        {
+            _db.Comments.Remove(_db.Comments.FirstOrDefault(c => c.CommentKey == id));
+            _db.SaveChanges();
+            return Json(null);
+        }
+
+        [Authorize(Roles = "Admin, User")]
+        [HttpPost]
+        public IActionResult AddComment(int id, string commentText)
+        {
+            Comment comment = new Comment {
+                Content = commentText,
+                UserId = _userManager.GetUserId(User),
+                BlogPostId = id,
+                Time = DateTime.Now
+            };
+            _db.Comments.Add(comment);
+            _db.SaveChanges();
+            return Json(null);
         }
     }
 }

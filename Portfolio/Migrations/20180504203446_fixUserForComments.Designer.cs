@@ -8,9 +8,10 @@ using Portfolio.Models;
 namespace Portfolio.Migrations
 {
     [DbContext(typeof(PortfolioDbContext))]
-    partial class PortfolioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180504203446_fixUserForComments")]
+    partial class fixUserForComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.5");
@@ -197,15 +198,15 @@ namespace Portfolio.Migrations
 
                     b.Property<string>("Content");
 
-                    b.Property<DateTime>("Time");
+                    b.Property<int>("UserId");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId1");
 
                     b.HasKey("CommentKey");
 
                     b.HasIndex("BlogPostId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Comments");
                 });
@@ -256,7 +257,7 @@ namespace Portfolio.Migrations
 
                     b.HasOne("Portfolio.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
                 });
         }
     }

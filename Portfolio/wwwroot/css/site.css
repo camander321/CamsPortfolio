@@ -37,3 +37,14 @@
 .blog-content {
     word-wrap:break-word;
 }
+
+.comment-panel {
+    border-radius: 5px;
+    background-color: white;
+    padding:1em;
+}
+
+.del-button {
+    color:red;
+    cursor:pointer;
+}

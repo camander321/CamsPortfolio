@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Portfolio.Migrations
 {
-    public partial class blogpostTime : Migration
+    public partial class addCommentTime : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<DateTime>(
                 name: "Time",
-                table: "BlogPosts",
+                table: "Comments",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
         }
@@ -19,7 +19,7 @@ namespace Portfolio.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Time",
-                table: "BlogPosts");
+                table: "Comments");
         }
     }
 }

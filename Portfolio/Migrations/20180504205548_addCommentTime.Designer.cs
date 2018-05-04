@@ -8,8 +8,8 @@ using Portfolio.Models;
 namespace Portfolio.Migrations
 {
     [DbContext(typeof(PortfolioDbContext))]
-    [Migration("20180504170405_blogpostTime")]
-    partial class blogpostTime
+    [Migration("20180504205548_addCommentTime")]
+    partial class addCommentTime
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -189,6 +189,28 @@ namespace Portfolio.Migrations
                     b.ToTable("BlogPosts");
                 });
 
+            modelBuilder.Entity("Portfolio.Models.Comment", b =>
+                {
+                    b.Property<int>("CommentKey")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BlogPostId");
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime>("Time");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("CommentKey");
+
+                    b.HasIndex("BlogPostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
@@ -224,6 +246,18 @@ namespace Portfolio.Migrations
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Portfolio.Models.Comment", b =>
+                {
+                    b.HasOne("Portfolio.Models.BlogPost", "BlogPost")
+                        .WithMany("Comments")
+                        .HasForeignKey("BlogPostId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Portfolio.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
         }
     }

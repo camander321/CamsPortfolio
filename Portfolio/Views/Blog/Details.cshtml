@@ -1,4 +1,5 @@
 @model Portfolio.Models.BlogPost
+@using System.Security.Claims
 @{
     ViewData["Title"] = "Details";
 }
@@ -8,10 +9,10 @@
 
 @if (User.IsInRole("Admin"))
 {
-<h6>
-    @Html.ActionLink("Edit Post", "Edit", new { id = Model.BlogPostKey }) |
-    @Html.ActionLink("Delete Post", "Delete", new { id = Model.BlogPostKey })
-</h6>
+    <h6>
+        @Html.ActionLink("Edit Post", "Edit", new { id = Model.BlogPostKey }) |
+        @Html.ActionLink("Delete Post", "Delete", new { id = Model.BlogPostKey })
+    </h6>
 }
 
 <div class="well">
@@ -21,7 +22,64 @@
 
     <hr />
 
-    <p class="blog-content">@Model.Content</p>
+    <p class="blog-content">@Model.Content</p><hr /><br /><br />
+
+    <div class="comment-panel">
+        @if (User.IsInRole("Admin") || User.IsInRole("User"))
+        {
+            <form class="new-comment">
+                <label for="comment-text">Add A Comment</label>
+                <input id="comment-text" name="commentText"/>
+                <button type="submit" class="btn btn-success">Post Comment</button>
+            </form>
+        }
+        
+        <div class="comments"></div>
+    </div>
 
 </div>
+
+<script>
+    function listComments(result) {
+        console.log(result);
+        var comments = $(".comments");
+        comments.empty();
+        result.forEach(function (item) {
+            var html = "<hr><p>" + item.content + "</p><h6>" + item.user.userName + " - " + item.time;
+            @if (User.IsInRole("Admin")) {  WriteLiteral("html += ` <span class='del-button'>delete</span>`;"); }
+            html += "</h6>";
+            comments.append(html);
+
+            $(".del-button").last().click(function () {
+                ajaxCall('@Url.Action("DeleteComment")' + "/" + item.commentKey, 'POST', _=>refresh());
+            })
+        });
+    }
+
+    function ajaxCall(url, type, onSuccess) {
+        console.log(url);
+        $.ajax({
+            type: type,
+            url: url,
+            success: onSuccess
+        });
+    }
+
+    function refresh() {
+        ajaxCall('@Url.Action("GetComments", new { id = Model.BlogPostKey })', 'GET', listComments);
+    }
+
+    $(".new-comment").submit(function (event) { 
+        event.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AddComment", new { id = Model.BlogPostKey })',
+            data: $(this).serialize(),
+            datatype: 'json',
+            success: refresh
+        });
+    });
+
+    refresh();
+</script>
 

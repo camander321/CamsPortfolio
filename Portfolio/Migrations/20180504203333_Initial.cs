@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Portfolio.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -70,6 +70,7 @@ namespace Portfolio.Migrations
                     BlogPostKey = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGeneratedOnAdd", true),
                     Content = table.Column<string>(nullable: true),
+                    Time = table.Column<DateTime>(nullable: false),
                     Title = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -163,6 +164,34 @@ namespace Portfolio.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    CommentKey = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGeneratedOnAdd", true),
+                    BlogPostId = table.Column<int>(nullable: false),
+                    Content = table.Column<string>(nullable: true),
+                    UserId = table.Column<int>(nullable: false),
+                    UserId1 = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.CommentKey);
+                    table.ForeignKey(
+                        name: "FK_Comments_BlogPosts_BlogPostId",
+                        column: x => x.BlogPostId,
+                        principalTable: "BlogPosts",
+                        principalColumn: "BlogPostKey",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
@@ -199,6 +228,16 @@ namespace Portfolio.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_BlogPostId",
+                table: "Comments",
+                column: "BlogPostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_UserId1",
+                table: "Comments",
+                column: "UserId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -219,10 +258,13 @@ namespace Portfolio.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BlogPosts");
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "BlogPosts");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

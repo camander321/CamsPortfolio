@@ -10,6 +10,7 @@ namespace Portfolio.Models
     public class PortfolioDbContext : IdentityDbContext<ApplicationUser>
     {
         public virtual DbSet<BlogPost> BlogPosts { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
 
         public PortfolioDbContext() { }
 

@@ -8,8 +8,8 @@ using Portfolio.Models;
 namespace Portfolio.Migrations
 {
     [DbContext(typeof(PortfolioDbContext))]
-    [Migration("20180504163329_initial")]
-    partial class initial
+    [Migration("20180504203333_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -180,11 +180,35 @@ namespace Portfolio.Migrations
 
                     b.Property<string>("Content");
 
+                    b.Property<DateTime>("Time");
+
                     b.Property<string>("Title");
 
                     b.HasKey("BlogPostKey");
 
                     b.ToTable("BlogPosts");
+                });
+
+            modelBuilder.Entity("Portfolio.Models.Comment", b =>
+                {
+                    b.Property<int>("CommentKey")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BlogPostId");
+
+                    b.Property<string>("Content");
+
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1");
+
+                    b.HasKey("CommentKey");
+
+                    b.HasIndex("BlogPostId");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -222,6 +246,18 @@ namespace Portfolio.Migrations
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Portfolio.Models.Comment", b =>
+                {
+                    b.HasOne("Portfolio.Models.BlogPost", "BlogPost")
+                        .WithMany("Comments")
+                        .HasForeignKey("BlogPostId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Portfolio.Models.ApplicationUser", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId1");
                 });
         }
     }
