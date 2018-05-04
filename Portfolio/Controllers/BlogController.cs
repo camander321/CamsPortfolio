@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Portfolio.Models;
@@ -39,11 +40,13 @@ namespace Portfolio.Controllers
             return Json(model);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Create(BlogPostViewModel model)
         {
@@ -56,6 +59,33 @@ namespace Portfolio.Controllers
             _db.BlogPosts.Add(post);
             _db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Details(int id)
+        {
+            BlogPost post = _db.BlogPosts.FirstOrDefault(b => b.BlogPostKey == id);
+            return View(post);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult Delete(int id)
+        {
+            _db.BlogPosts.Remove(_db.BlogPosts.FirstOrDefault(b => b.BlogPostKey == id));
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Edit(int id)
+        {
+            return View(_db.BlogPosts.FirstOrDefault(b => b.BlogPostKey == id));
+        }
+
+        [HttpPost]
+        public IActionResult Edit(BlogPost post)
+        {
+            _db.Entry(post).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _db.SaveChanges();
+            return RedirectToAction("Details", new { id = post.BlogPostKey });
         }
     }
 }

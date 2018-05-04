@@ -4,6 +4,7 @@
 @using Portfolio.ViewModels
 @model BlogPostViewModel
 
+<h6><a href="../"></a></h6>
 <h2>Add a new Post</h2>
 
 @using (Html.BeginForm())
@@ -15,7 +16,7 @@
     <br />
 
     @Html.LabelFor(m => m.Content) <br />
-    @Html.TextAreaFor(m => m.Content, 10, 80, new { });
+    @Html.TextAreaFor(m => m.Content, 10, 80, new { }) <br />
 
     <input type="submit" value="Post!" class="btn btn-success" />
 }

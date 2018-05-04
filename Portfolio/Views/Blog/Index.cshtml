@@ -3,7 +3,8 @@
     ViewData["Title"] = "Blog";
 }
 
-<h2>My Blog Posts</h2>
+<h6><a href="../">Back</a></h6>
+<h2>My Blog</h2>
 
 @if (User.IsInRole("Admin"))
 {
@@ -34,7 +35,7 @@
 
             var list = $("#post-list");
             result.data.forEach(function (item) {
-                var html = "<h3>" + item.title + "</h3>";
+                var html = "<h3><a href='/Blog/Details/" + item.blogPostKey + "'>" + item.title + "</a></h3>";
                 html += "<h6>" + item.time + "</h6>";
                 list.append("<div class='well'>" + html + "</div>");
             })
