@@ -20,7 +20,7 @@ namespace Portfolio.Models
             _db = db;
         }
 
-        public IQueryable<BlogPost> BlogPosts => throw new NotImplementedException();
+        public IQueryable<BlogPost> BlogPosts => _db.BlogPosts;
 
         public BlogPost Edit(BlogPost post)
         {

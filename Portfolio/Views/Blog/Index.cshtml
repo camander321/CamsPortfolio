@@ -1,0 +1,32 @@
+
+@{
+    ViewData["Title"] = "Blog";
+}
+
+<h2>My Blog Posts</h2>
+
+<h5 id="list-info">Showing posts <span id="first"></span>-<span id="last"></span> of <span id="total"></span></h5>
+<ul id="post-list"></ul>
+
+<script>
+    $("#list-info").hide();
+    $.ajax({
+        type: 'GET',
+        url: '@Url.Action("GetPosts")', success: function (result) {
+            console.log(result);
+            var first = (result.page - 1) * result.shown + 1;
+            var last = first + result.shown;
+            if (last > result.total) last = result.total;
+
+            $("#first").text(first);
+            $("#last").text(last);
+            $("#total").text(result.total);
+            $("#list-info").show();
+
+            result.data.forEach(function (item) {
+                
+            })
+        }
+    });
+</script>
+
