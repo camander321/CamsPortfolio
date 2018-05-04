@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Portfolio.Models;
+using Portfolio.ViewModels;
 
 namespace Portfolio.Controllers
 {
@@ -36,6 +37,25 @@ namespace Portfolio.Controllers
                 ["data"] = _db.BlogPosts.OrderByDescending(b => b.Time).Skip((pageNum - 1) * perPage).Take(perPage).ToList()
             };
             return Json(model);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(BlogPostViewModel model)
+        {
+            BlogPost post = new BlogPost
+            {
+                Title = model.Title,
+                Content = model.Content,
+                Time = DateTime.Now
+            };
+            _db.BlogPosts.Add(post);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

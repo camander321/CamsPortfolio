@@ -7,7 +7,7 @@
 
 @if (User.IsInRole("Admin"))
 {
-
+    @Html.ActionLink("Create a new Post", "Create")
 }
 
 <div id="posts">
@@ -25,6 +25,7 @@
             var first = (result.page - 1) * result.shown + 1;
             var last = first + result.shown;
             if (last > result.total) last = result.total;
+            if (first > result.total) first = result.total;
 
             $("#first").text(first);
             $("#last").text(last);

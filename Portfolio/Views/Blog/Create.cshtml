@@ -1,0 +1,24 @@
+@{
+    ViewData["Title"] = "Create";
+}
+@using Portfolio.ViewModels
+@model BlogPostViewModel
+
+<h2>Add a new Post</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(m => m.Title) <br />
+    @Html.TextBoxFor(m => m.Title)
+
+    <br />
+    <br />
+
+    @Html.LabelFor(m => m.Content) <br />
+    @Html.TextAreaFor(m => m.Content, 10, 80, new { });
+
+    <input type="submit" value="Post!" class="btn btn-success" />
+}
+
+
+
