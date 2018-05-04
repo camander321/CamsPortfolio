@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Portfolio.Models;
 
 namespace Portfolio
 {
@@ -34,14 +35,14 @@ namespace Portfolio
         {
             services.AddMvc();
 
-            services.AddEntityFrameworkMySql().AddDbContext<WeinerDbContext>(options => options.UseMySql(Configuration["ConnectionStrings:DefaultConnection"]));
+            services.AddEntityFrameworkMySql().AddDbContext<PortfolioDbContext>(options => options.UseMySql(Configuration["ConnectionStrings:DefaultConnection"]));
 
             // This is new
-            services.AddIdentity<AppUser, IdentityRole>()
-                .AddEntityFrameworkStores<WeinerDbContext>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<PortfolioDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddIdentity<AppUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
