@@ -25,17 +25,35 @@ namespace Portfolio
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
-            ConnectionString = Configuration["ConnectionStrings:DefaultConnection"];
+            string azureConnectionString = Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb");
+            ConnectionString = azureConnectionString == null ? 
+                Configuration["ConnectionStrings:DefaultConnection"] : 
+                ParseAzureConnectionString(azureConnectionString);
         }
 
-        
+        private static string ParseAzureConnectionString(string azureString)
+        {
+            string server = "server=localhost;";
+
+            int portStart = azureString.IndexOf(':') + 1;
+            int portStop = azureString.IndexOf(';', portStart);
+            string port = "port=" + azureString.Substring(portStart, portStop - portStart) + ";";
+
+            string database = "database=localdb;";
+
+            string uid = "uid=azure;";
+
+            string pwd = "pwd=" + azureString.Substring(azureString.LastIndexOf('=') + 1) + ';';
+
+            return server+port+database+uid+pwd;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
 
-            services.AddEntityFrameworkMySql().AddDbContext<PortfolioDbContext>(options => options.UseMySql(Configuration["ConnectionStrings:DefaultConnection"]));
+            services.AddEntityFrameworkMySql().AddDbContext<PortfolioDbContext>(options => options.UseMySql(ConnectionString));
 
             // This is new
             services.AddIdentity<ApplicationUser, IdentityRole>()
