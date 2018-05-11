@@ -18,7 +18,7 @@
 <div class="well">
 
     <h3>@Model.Title</h3>
-    <h6>@Model.Time</h6>
+    <h6>@Model.Time.ToString("mm/dd/yyyy")</h6>
 
     <hr />
 
@@ -45,7 +45,7 @@
         var comments = $(".comments");
         comments.empty();
         result.forEach(function (item) {
-            var html = "<hr><p>" + item.content + "</p><h6>" + item.user.userName + " - " + item.time;
+            var html = "<hr><p>" + item.content + "</p><h6>" + item.user.userName + " - " + (new Date(item.time)).toString("mm/dd/yy");
             @if (User.IsInRole("Admin")) {  WriteLiteral("html += ` <span class='del-button'>delete</span>`;"); }
             html += "</h6>";
             comments.append(html);

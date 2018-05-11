@@ -36,7 +36,7 @@
             var list = $("#post-list");
             result.data.forEach(function (item) {
                 var html = "<h3><a href='/Blog/Details/" + item.blogPostKey + "'>" + item.title + "</a></h3>";
-                html += "<h6>" + item.time + "</h6>";
+                html += "<h6>" + (new Date(item.time)).toString("mm/dd/yy") + "</h6>";
                 list.append("<div class='well'>" + html + "</div>");
             })
         }

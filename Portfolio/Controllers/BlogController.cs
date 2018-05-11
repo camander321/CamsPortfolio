@@ -85,6 +85,7 @@ namespace Portfolio.Controllers
         [HttpPost]
         public IActionResult Edit(BlogPost post)
         {
+            post.Time = DateTime.Now;
             _db.Entry(post).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _db.SaveChanges();
             return RedirectToAction("Details", new { id = post.BlogPostKey });
