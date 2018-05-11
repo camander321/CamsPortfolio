@@ -60,13 +60,17 @@ h5 {
 
 #carousel-title {
     font-size:2em;
+    padding-top:1em;
+    font-style:italic;
+    font-weight:600;
     background-color:aquamarine;
     border-bottom-width: 0px;
 }
 
 #myCarousel {
     background-color: aquamarine;
-    
+    border-radius: 1em;
+    overflow:hidden;
 }
 
 .blog-content {
@@ -86,5 +90,16 @@ h5 {
 
 .personal_pic {
     width: 200px;
-    height: auto;
+    height: 200px;
+    object-fit:cover;
+    border-radius: 50%;
+}
+
+.info-btn {
+    text-align:center;
+    cursor:pointer;
+}
+
+.contact {
+    list-style:none;
 }
