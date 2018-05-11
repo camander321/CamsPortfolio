@@ -12,6 +12,7 @@ namespace Portfolio.Controllers
     {
         public IActionResult Index()
         {
+            (new GithubRepo()).GetTopStarred();
             return View();
         }
 
