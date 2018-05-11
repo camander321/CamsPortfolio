@@ -48,3 +48,8 @@
     color:red;
     cursor:pointer;
 }
+
+.personal_pic {
+    width: 200px;
+    height: auto;
+}
