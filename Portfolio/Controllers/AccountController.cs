@@ -21,10 +21,6 @@ namespace Portfolio.Controllers
             _signInManager = signInManager;
             _db = db;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         public IActionResult Login()
         {
@@ -35,7 +31,7 @@ namespace Portfolio.Controllers
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: true, lockoutOnFailure: false);
-            if (result.Succeeded) return RedirectToAction("Index");
+            if (result.Succeeded) return RedirectToAction("Index", "Home");
             ViewData["msg"] = "Incorrect email or password";
             return View();
         }
@@ -60,7 +56,7 @@ namespace Portfolio.Controllers
                 {
                     _db.SaveChanges();
                     if((await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: true, lockoutOnFailure: false)).Succeeded)
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index", "Home");
                     
                 }
             }
@@ -70,11 +66,11 @@ namespace Portfolio.Controllers
             return View();
         }
 
-        [HttpPost]
+        //[HttpPost]
         public async Task<IActionResult> LogOff()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult AccessDenied(string ReturnUrl)
