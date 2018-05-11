@@ -14,7 +14,7 @@ namespace Portfolio.Models
         public string Description { get; set; }
         public string URL { get; set; }
 
-        public void GetTopStarred()
+        public static List<GithubRepo> GetTopStarred()
         {
             RestClient client = new RestClient("https://api.github.com");
             RestRequest request = new RestRequest("search/repositories", Method.GET);
@@ -22,11 +22,24 @@ namespace Portfolio.Models
             request.AddParameter("sort", "stars");
             request.AddParameter("per_page", "3");
             request.AddHeader("User-Agent", "camander321");
+            RestResponse response = new RestResponse();
 
-            client.ExecuteAsync(request, response =>
+            Task.Run(async () =>
             {
-                Console.WriteLine(response);
+                response = await GetResponseContentAsync(client, request) as RestResponse;
+            }).Wait();
+
+            JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
+            return JsonConvert.DeserializeObject<List<GithubRepo>>(jsonResponse["items"].ToString());
+        }
+
+        public static Task<IRestResponse> GetResponseContentAsync(RestClient theClient, RestRequest theRequest)
+        {
+            var tcs = new TaskCompletionSource<IRestResponse>();
+            theClient.ExecuteAsync(theRequest, response => {
+                tcs.SetResult(response);
             });
+            return tcs.Task;
         }
     }  
 }
