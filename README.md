@@ -6,6 +6,7 @@
 
 # Description
 This is my personal portfolio website. Guests can register and leave comments on blog posts
+Hosted with Microsoft Azure at http://cameronandersoncodes.com
 
 ## Functionality
 ### User Stories
